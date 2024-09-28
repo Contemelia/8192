@@ -223,7 +223,9 @@ function moveDown() {
             newRow.push(board[column][row]);
         }
         newRow = clearZeroes(newRow);
+        newRow = newRow.reverse();
         newRow = swipe(newRow);
+        newRow = newRow.reverse();
         while (newRow.length < size) {
             newRow.unshift(0);
         }
@@ -257,7 +259,9 @@ function moveLeft() {
 function moveRight() {
     for (let row = 0; row < size; row++) {
         let newRow = clearZeroes(board[row]);
+        newRow = newRow.reverse();
         newRow = swipe(newRow);
+        newRow = newRow.reverse();
         while (newRow.length < size) {
             newRow.unshift(0);
         }
