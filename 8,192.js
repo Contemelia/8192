@@ -130,6 +130,17 @@ document.addEventListener("keyup", (event) => {
     moveTiles(event);
 })
 
+document.addEventListener("touchstart", (event) => {
+    touchStart(event);
+})
+
+document.addEventListener("touchmove", (event) => {
+    touchMove(event);
+})
+
+let xDown = null;
+let yDown = null;
+
 
 
 function moveTiles(event) {
@@ -145,6 +156,41 @@ function moveTiles(event) {
     else if (event.key.toLowerCase() === "arrowright" || event.key.toLowerCase() === "d") {
         moveRight();
     }
+}
+
+function touchStart(event) {
+    xDown = event.touches[0].clientX;
+    yDown = event.touches[0].clientY;
+}
+
+function touchMove(event) {
+    if (!xDown || !yDown) {
+        return;
+    }
+
+    const xUp = event.touches[0].clientX;                                    
+    const yUp = event.touches[0].clientY;
+
+    const xDiff = xDown - xUp;
+    const yDiff = yDown - yUp;
+
+    if (Math.abs(xDiff) > Math.abs(yDiff)) {
+        if (xDiff > 0) {
+            moveLeft();
+        } else {
+            moveRight();
+        }
+    } else {
+        if (yDiff > 0) {
+            moveUp();
+        } else {
+            moveDown();
+        }
+    }
+
+    // Reset values
+    xDown = null;
+    yDown = null; 
 }
 
 
