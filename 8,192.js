@@ -130,6 +130,17 @@ document.addEventListener("keyup", (event) => {
     moveTiles(event);
 })
 
+document.addEventListener("touchstart", (event) => {
+    touchStart(event);
+})
+
+document.addEventListener("touchmove", (event) => {
+    touchMove(event);
+})
+
+let xDown = null;
+let yDown = null;
+
 
 
 function moveTiles(event) {
@@ -147,20 +158,133 @@ function moveTiles(event) {
     }
 }
 
+function touchStart(event) {
+    xDown = event.touches[0].clientX;
+    yDown = event.touches[0].clientY;
+}
+
+function touchMove(event) {
+    if (!xDown || !yDown) {
+        return;
+    }
+
+    const xUp = event.touches[0].clientX;                                    
+    const yUp = event.touches[0].clientY;
+
+    const xDiff = xDown - xUp;
+    const yDiff = yDown - yUp;
+
+    if (Math.abs(xDiff) > Math.abs(yDiff)) {
+        if (xDiff > 0) {
+            moveLeft();
+        } else {
+            moveRight();
+        }
+    } else {
+        if (yDiff > 0) {
+            moveUp();
+        } else {
+            moveDown();
+        }
+    }
+
+    // Reset values
+    xDown = null;
+    yDown = null; 
+}
+
 
 
 function moveUp() {
-    alert("Up");
+    for (let row = 0; row < size; row++) {
+        let newRow = [];
+        for (let column = 0; column < size; column++) {
+            newRow.push(board[column][row]);
+        }
+        newRow = clearZeroes(newRow);
+        newRow = swipe(newRow);
+        while (newRow.length < size) {
+            newRow.push(0);
+        }
+        for (let column = 0; column < size; column++) {
+            board[column][row] = newRow[column];
+            let tile = document.getElementById(column + "-" + row);
+            updateTile(tile, newRow[column]);
+        }
+    }
+
+    generateRandomTile();
 }
 
 function moveDown() {
-    alert("Down");
+    for (let row = 0; row < size; row++) {
+        let newRow = [];
+        for (let column = 0; column < size; column++) {
+            newRow.push(board[column][row]);
+        }
+        newRow = clearZeroes(newRow);
+        newRow = swipe(newRow);
+        while (newRow.length < size) {
+            newRow.unshift(0);
+        }
+        for (let column = 0; column < size; column++) {
+            board[column][row] = newRow[column];
+            let tile = document.getElementById(column + "-" + row);
+            updateTile(tile, newRow[column]);
+        }
+    }
+
+    generateRandomTile();
 }
 
 function moveLeft() {
-    alert("Left");
+    for (let row = 0; row < size; row++) {
+        let newRow = clearZeroes(board[row]);
+        newRow = swipe(newRow);
+        while (newRow.length < size) {
+            newRow.push(0);
+        }
+        for (let column = 0; column < size; column++) {
+            board[row][column] = newRow[column];
+            let tile = document.getElementById(row + "-" + column);
+            updateTile(tile, newRow[column]);
+        }
+    }
+
+    generateRandomTile();
 }
 
 function moveRight() {
-    alert("Right");
+    for (let row = 0; row < size; row++) {
+        let newRow = clearZeroes(board[row]);
+        newRow = swipe(newRow);
+        while (newRow.length < size) {
+            newRow.unshift(0);
+        }
+        for (let column = 0; column < size; column++) {
+            board[row][column] = newRow[column];
+            let tile = document.getElementById(row + "-" + column);
+            updateTile(tile, newRow[column]);
+        }
+    }
+
+    generateRandomTile();
+}
+
+function swipe(row) {
+    for (let index = 0; index < row.length - 1; index++) {
+        if (row[index] === row[index + 1]) {
+            row[index] *= 2;
+            row[index + 1] = 0;
+            score += row[index];
+            document.getElementById("current-score").innerHTML = score;
+            if (score > highscore) {
+                highscore = score;
+                document.getElementById("high-score").innerHTML = highscore;
+            }
+        }
+    }
+    row = clearZeroes(row);
+
+    return row;
 }

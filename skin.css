@@ -16,6 +16,7 @@
 body {
     /* background: linear-gradient(45deg, #147d51 0%, #130214 100%); */
     background: rgb(3, 3, 19);
+    background-size: cover;
     font-family: Arial, Helvetica, sans-serif;
 
     /* margin-bottom: 0px; */
@@ -160,11 +161,12 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1rem;
     color: rgb(204, 204, 204);
     background-color: rgb(11, 11, 18);
     border-radius: 1rem;
-
+    
+    font-size: 1.5rem;
+    font-size: max(0.5rem, 2vh, 1vw);
     font-family: "Ma Shan Zheng", cursive;
     font-weight: 400;
     font-style: normal;
